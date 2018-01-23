@@ -24,30 +24,34 @@ import Web3  from 'web3';
 let web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/j2AjN0PnreWx1hGzLhDv'));
 
+var sender = "0x527c809fc45cc10fd749aadbb298cd98319e5649"
+var recipent = "0x8d77e459622e56270e323e6795fe10393b214756"
+var contractAddress = "0x37Db4d5E5c5B60C9d4CE2B8d09054E9595e9437a"
+
+
+
 // Fetch ABI
 var abiArray = JSON.parse(fs.readFileSync('./tt3.json', 'utf-8'));
 console.log("1");
 // Get a proxy on our Ropsten contract
-let contract = web3.eth.contract(abiArray).at('0x37Db4d5E5c5B60C9d4CE2B8d09054E9595e9437a');
+let contract = web3.eth.contract(abiArray).at(contractAddress);
 console.log("3");
 
-var balance = web3.eth.getBalance("0x527C809Fc45cc10FD749aadbB298cD98319e5649");
+var balance = web3.eth.getBalance(sender);
 console.log(balance.toNumber() + " ETH"); // instanceof BigNumber
 
-console.log(contract.balanceOf("0x527c809fc45cc10fd749aadbb298cd98319e5649").toNumber() + " SHIT")
+console.log(contract.balanceOf(sender).toNumber() + " SHIT")
 
-
-
-var data = contract.transfer.getData("0x8d77e459622e56270e323e6795fe10393b214756", 4, {from: "0x527C809Fc45cc10FD749aadbB298cD98319e5649"});
+var data = contract.transfer.getData(recipent, 2000, {from: sender});
 var gasPrice = web3.eth.gasPrice;
-var gasLimit = 90000;
-var count = web3.eth.getTransactionCount("0x527C809Fc45cc10FD749aadbB298cD98319e5649");
+var gasLimit = 190000;
+var count = web3.eth.getTransactionCount(sender);
 var rawTransaction = {
-  "from": "0x527C809Fc45cc10FD749aadbB298cD98319e5649",
+  "from": sender,
   "nonce": web3.toHex(count),
   "gasPrice": web3.toHex(gasPrice),
   "gasLimit": web3.toHex(gasLimit),
-  "to": "0x8D77E459622e56270E323E6795fE10393b214756",
+  "to": contractAddress,
   "value": "0",
   "data": data,
   "chainId": 0x03
