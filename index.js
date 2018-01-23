@@ -1,5 +1,8 @@
 // Get private stuff from my .env file
-import {my_privkey, infura_api_key} from '../.env'
+import {
+  my_privkey,
+  infura_api_key
+} from '../.env'
 
 // Need access to my path and file system
 import path from 'path'
@@ -19,14 +22,14 @@ var Tx = require('ethereumjs-tx');
  */
 
 import fs from "fs";
-import Web3  from 'web3';
+import Web3 from 'web3';
 
 let web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/j2AjN0PnreWx1hGzLhDv'));
 
 var sender = "0x527c809fc45cc10fd749aadbb298cd98319e5649"
 var recipent = "0x8d77e459622e56270e323e6795fe10393b214756"
-var contractAddress = "0x37Db4d5E5c5B60C9d4CE2B8d09054E9595e9437a"
+var contractAddress = "0xd091d560935c6966914c0d689740fc2a8088f21a"
 
 
 
@@ -40,9 +43,11 @@ console.log("3");
 var balance = web3.eth.getBalance(sender);
 console.log(balance.toNumber() + " ETH"); // instanceof BigNumber
 
-console.log(contract.balanceOf(sender).toNumber() + " SHIT")
+console.log(contract.balanceOf(sender).toNumber() + " OATH")
 
-var data = contract.transfer.getData(recipent, 2000, {from: sender});
+var data = contract.transfer.getData(recipent, 2000, {
+  from: sender
+});
 var gasPrice = web3.eth.gasPrice;
 var gasLimit = 190000;
 var count = web3.eth.getTransactionCount(sender);
@@ -65,9 +70,9 @@ var serializedTx = tx.serialize();
 
 web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
   if (!err)
-      console.log(hash);
+    console.log(hash);
   else
-      console.log(err);
+    console.log(err);
 });
 
 
