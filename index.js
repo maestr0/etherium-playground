@@ -28,14 +28,46 @@ web3.setProvider(new web3.providers.HttpProvider('https://ropsten.infura.io/j2Aj
 var abiArray = JSON.parse(fs.readFileSync('./tt3.json', 'utf-8'));
 console.log("1");
 // Get a proxy on our Ropsten contract
-let SampleContract = web3.eth.contract(abiArray);
-let contract = SampleContract.at('0x37Db4d5E5c5B60C9d4CE2B8d09054E9595e9437a');
+let contract = web3.eth.contract(abiArray).at('0x37Db4d5E5c5B60C9d4CE2B8d09054E9595e9437a');
 console.log("3");
 
 var balance = web3.eth.getBalance("0x527C809Fc45cc10FD749aadbB298cD98319e5649");
 console.log(balance.toNumber() + " ETH"); // instanceof BigNumber
 
 console.log(contract.balanceOf("0x527c809fc45cc10fd749aadbb298cd98319e5649").toNumber() + " SHIT")
+
+
+
+var data = contract.transfer.getData("0x8d77e459622e56270e323e6795fe10393b214756", 4, {from: "0x527C809Fc45cc10FD749aadbB298cD98319e5649"});
+var gasPrice = web3.eth.gasPrice;
+var gasLimit = 90000;
+var count = web3.eth.getTransactionCount("0x527C809Fc45cc10FD749aadbB298cD98319e5649");
+var rawTransaction = {
+  "from": "0x527C809Fc45cc10FD749aadbB298cD98319e5649",
+  "nonce": web3.toHex(count),
+  "gasPrice": web3.toHex(gasPrice),
+  "gasLimit": web3.toHex(gasLimit),
+  "to": "0x8D77E459622e56270E323E6795fE10393b214756",
+  "value": "0",
+  "data": data,
+  "chainId": 0x03
+};
+
+var privKey = new Buffer(my_privkey, 'hex');
+var tx = new Tx(rawTransaction);
+
+tx.sign(privKey);
+var serializedTx = tx.serialize();
+
+web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
+  if (!err)
+      console.log(hash);
+  else
+      console.log(err);
+});
+
+
+
 //
 //
 // var count = web3.eth.getTransactionCount("0x527C809Fc45cc10FD749aadbB298cD98319e5649");
